@@ -1,3 +1,83 @@
+"""
+MY-SUPERIOR — nueva versión minimalista y emocional
+
+Esta implementación es una versión inicial reconstruida con enfoque visual:
+"""
+
+from datetime import date
+import streamlit as st
+
+
+USER_NAME = "Maye"
+FAMILY_MEMBERS = [
+    {"name": "Papá Wilson", "icon": "👨"},
+    {"name": "Hermana Mercy", "icon": "👩"},
+    {"name": "Hermano Wilson", "icon": "👦"},
+    {"name": "Hermana Liceth", "icon": "👩"},
+    {"name": "Amigos", "icon": "🧑👩‍🧑"},
+]
+
+MORAR_MESSAGES = [
+    "¡Hola, Maye! Hoy estás brillante 🌸",
+    "Respira, sigue y sonríe 💗",
+    "Un abrazo virtual y energía positiva para ti 💫",
+]
+
+
+def inject_styles():
+    st.markdown(
+        """
+        <style>
+            :root{--pink-100:#fff0f6;--pink-200:#ffe4f2;--accent:#ff8bb2}
+            .stApp { background: linear-gradient(180deg, var(--pink-200) 0%, #fff 40%); }
+            .hero { padding:18px; border-radius:20px; background:linear-gradient(135deg, #fff0f6, #ffe4f2); border:1px solid rgba(255,147,191,0.4); box-shadow:0 8px 24px rgba(255,150,185,0.12); }
+            .greeting { font-size:28px; color:#8f074a; margin:0; }
+            .sub { color:#7d1f50; margin-top:6px; }
+            .morar { padding:10px 14px; border-radius:16px; background:rgba(255,236,245,0.9); color:#6c173e; margin:12px 0; }
+            .family-card { display:flex; gap:14px; align-items:center; padding:12px; border-radius:16px; background:#fff; border:1px solid rgba(255,177,202,0.6); box-shadow:0 8px 20px rgba(255,157,198,0.08); }
+            .icon { width:56px; height:56px; display:flex; align-items:center; justify-content:center; font-size:28px; background:#ffdeea; border-radius:12px; color:#a2185f; }
+            .name { font-weight:600; color:#54143e; margin:0; }
+            .last { color:#8d326c; margin:2px 0 0 0; }
+            .register { background:var(--accent); color:white; padding:8px 14px; border-radius:14px; border:none; }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
+def get_morar():
+    return MORAR_MESSAGES[date.today().day % len(MORAR_MESSAGES)]
+
+
+def main():
+    st.set_page_config(page_title="MY-SUPERIOR", page_icon=":sparkles:")
+    inject_styles()
+
+    st.markdown(f"<div class='hero'><p class='greeting'>Hola {USER_NAME} 💖</p><p class='sub'>Bienvenida a MY-SUPERIOR — tu coach personal.</p></div>", unsafe_allow_html=True)
+
+    st.markdown(f"<div class='morar'><strong>Morar:</strong> {get_morar()}</div>", unsafe_allow_html=True)
+
+    st.header("👨‍👩‍👧‍👦 Familia")
+    st.write("Registra interacciones rápidas y mantén el cariño en orden.")
+
+    for person in FAMILY_MEMBERS:
+        col1, col2, col3 = st.columns([1, 6, 2])
+        with col1:
+            st.markdown(f"<div class='icon'>{person['icon']}</div>", unsafe_allow_html=True)
+        with col2:
+            st.markdown(f"<p class='name'>{person['name']}</p><p class='last'>Último contacto: —</p>", unsafe_allow_html=True)
+        with col3:
+            if st.button('Registrar', key=person['name']):
+                st.success(f"Interacción registrada: {person['name']}")
+
+    st.sidebar.header("Estado emocional")
+    mood = st.sidebar.selectbox("¿Cómo te sientes?", ["Excelente", "Bien", "Difícil"])
+    phrase = "Hoy vas bien 💪" if mood == "Excelente" else ("No te rindas, Maye 🌸" if mood == "Difícil" else "Vamos a mejorar juntos")
+    st.sidebar.info(phrase)
+
+
+if __name__ == '__main__':
+    main()
 from datetime import date, datetime, timedelta
 from pathlib import Path
 import sqlite3
